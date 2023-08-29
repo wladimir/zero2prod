@@ -1,16 +1,28 @@
-use actix_web::{web, App, HttpServer, HttpResponse};
 use actix_web::dev::Server;
+use actix_web::{web, App, HttpResponse, HttpServer};
+use std::net::TcpListener;
+
+#[derive(serde::Deserialize)]
+struct Payload {
+    name: String,
+    email: String,
+}
 
 async fn health_check() -> HttpResponse {
     HttpResponse::Ok().finish()
 }
 
-pub fn run() -> Result<Server, std::io::Error> {
+async fn subscribe(_payload: web::Json<Payload>) -> HttpResponse {
+    HttpResponse::Ok().finish()
+}
+
+pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
     let server = HttpServer::new(|| {
         App::new()
             .route("/health_check", web::get().to(health_check))
+            .route("/subscriptions", web::post().to(subscribe))
     })
-        .bind("127.0.0.1:8000")
-        ?.run();
+    .listen(listener)?
+    .run();
     Ok(server)
 }
