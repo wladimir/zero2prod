@@ -90,6 +90,8 @@ jobs:
       - name: oh i don't know
         run: |
           cat ./scripts/init-db.sh
+          chmod +x ./scripts/init_db.sh
+          SKIP_DOCKER=true ./scripts/init_db.sh
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
@@ -106,6 +108,7 @@ jobs:
       - name: Migrate database
         run: |
           sudo apt-get install libpq-dev -y
+          chmod +x ./scripts/init_db.sh
           SKIP_DOCKER=true ./scripts/init_db.sh
       - name: Linting
         run: cargo clippy -- -D warnings
