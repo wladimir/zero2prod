@@ -87,6 +87,10 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v3
+      - name: oh i don't know
+        run: |
+          ls -la
+          ls -la ./scripts/init-db.sh
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
@@ -102,7 +106,6 @@ jobs:
             --locked
       - name: Migrate database
         run: |
-          ls -la
           sudo apt-get install libpq-dev -y
           SKIP_DOCKER=true ./scripts/init_db.sh
       - name: Linting
