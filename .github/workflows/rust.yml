@@ -58,7 +58,7 @@ jobs:
       - name: Migrate database
         run: |
           sudo apt-get install libpq-dev -y
-          SKIP_DOCKER=true ./scripts/init_db.sh
+          SKIP_DOCKER=true ./scripts/init-db.sh
       - name: Run tests
         run: cargo test
 
@@ -87,10 +87,6 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v3
-      - name: oh i don't know
-        run: |
-          cat ./scripts/init-db.sh
-          SKIP_DOCKER=true ./scripts/init_db.sh
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
@@ -107,8 +103,7 @@ jobs:
       - name: Migrate database
         run: |
           sudo apt-get install libpq-dev -y
-          chmod +x ./scripts/init_db.sh
-          SKIP_DOCKER=true ./scripts/init_db.sh
+          SKIP_DOCKER=true ./scripts/init-db.sh
       - name: Linting
         run: cargo clippy -- -D warnings
 
@@ -143,6 +138,6 @@ jobs:
           --no-default-features
           --locked
       - name: Migrate database
-        run: SKIP_DOCKER=true ./scripts/init_db.sh
+        run: SKIP_DOCKER=true ./scripts/init-db.sh
       - name: Generate code coverage
         run: cargo tarpaulin --verbose --workspace
