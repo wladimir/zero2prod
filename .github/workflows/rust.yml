@@ -102,6 +102,7 @@ jobs:
             --locked
       - name: Migrate database
         run: |
+          ls -la
           sudo apt-get install libpq-dev -y
           SKIP_DOCKER=true ./scripts/init_db.sh
       - name: Linting
