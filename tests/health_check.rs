@@ -1,6 +1,7 @@
 //! tests/health_check.rs
-use sqlx::{Connection, Executor, PgConnection, PgPool};
 use std::net::TcpListener;
+
+use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 
 use zero2prod::configuration::{get_configuration, DatabaseSettings};
@@ -83,7 +84,7 @@ async fn subscribe_returns_a_200_for_valid_json_data() {
 
     assert_eq!(200, response.status().as_u16());
     let saved = sqlx::query!("SELECT email, name FROM subscriptions",)
-        .fetch_one(&mut connection)
+        .fetch_one(&app.db_pool)
         .await
         .expect("Failed to fetch saved subscription.");
     assert_eq!(saved.email, "a@b.com");
